@@ -1,0 +1,23 @@
+{
+  "author" : "Stanford Rosenthal",
+  "commands" : [
+    {
+      "script" : "script.cocoascript",
+      "handler" : "onRun",
+      "shortcut" : "option c",
+      "name" : "Bar Chart",
+      "identifier" : "bar"
+    },
+  ],
+  "menu": {
+    "isRoot": true,
+    "items": [
+      "bar",
+    ],
+  },
+  "identifier" : "com.github.nolastan.charts",
+  "version" : "1.0",
+  "description" : "Quickly insert charts into Sketch",
+  "authorEmail" : "nolastan@gmail.com",
+  "name" : "Charts"
+}

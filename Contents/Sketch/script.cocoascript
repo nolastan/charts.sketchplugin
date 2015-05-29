@@ -1,0 +1,47 @@
+var onRun = function(context) {
+  var doc = context.document;
+  var percent;
+  showOptions();
+  createContainer();
+  drawFill();
+  // Put into group
+
+  function createContainer() {
+    createBar(400, "#dd0000");
+  }
+
+  function drawFill() {
+    createBar(400 * percent / 100, "#00dd00");
+  }
+
+  function createBar(width, color) {
+    var rectShape = MSRectangleShape.alloc().init();
+    rectShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,width,40));
+
+    var shapeGroup=MSShapeGroup.shapeWithPath(rectShape);
+    var fill = shapeGroup.style().fills().addNewStylePart();
+    fill.color = MSColor.colorWithSVGString(color);
+    shapeGroup.frame().constrainProportions = true;
+
+    // Add created shape group to the current page.
+    doc.currentPage().addLayers([shapeGroup]);
+  }
+
+  function showOptions() {
+    var alert = [NSAlert alertWithMessageText: "Insert Bar Graph"
+                                   defaultButton:"Insert"
+                                 alternateButton:"Cancel"
+                                     otherButton:nil
+                       informativeTextWithFormat:"What percent?"];
+
+    var input = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 200, 24)];
+    [input setStringValue:"50"];
+    [input autorelease];
+    [alert setAccessoryView:input];
+    var button = [alert runModal];
+    [input validateEditing];
+    percent = [input stringValue];
+    log(percent);
+  }
+
+};
