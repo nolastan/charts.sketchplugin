@@ -1,0 +1,60 @@
+// Enter a percentage 1-25
+// var percent = 20;
+
+var alert = [NSAlert alertWithMessageText: "Insert Pie Chart"
+                               defaultButton:"Insert"
+                             alternateButton:"Cancel"
+                                 otherButton:nil
+                   informativeTextWithFormat:"What percent? (1-25 for now)"];
+
+var input = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 200, 24)];
+[input setStringValue:"25"];
+[input autorelease];
+[alert setAccessoryView:input];
+var button = [alert runModal];
+[input validateEditing];
+var percent = [input stringValue];
+
+var offset = (100 - percent * 4) * 2;
+var doc = context.document;
+var unit = 100;
+
+// create the pie
+var color = "#0000FF";
+var ovalShape = MSOvalShape.alloc().init();
+ovalShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,unit*2,unit*2));
+var pie=MSShapeGroup.shapeWithPath(ovalShape);
+var fill = pie.style().fills().addNewStylePart();
+fill.color = MSColor.colorWithSVGString(color);
+pie.frame().constrainProportions = true;
+doc.currentPage().addLayers([pie]);
+
+// create the mask
+var color = "#FF0000";
+var ovalShape = MSOvalShape.alloc().init();
+ovalShape.frame = MSRect.rectWithRect(NSMakeRect(0,0,unit*2,unit*2));
+var mask=MSShapeGroup.shapeWithPath(ovalShape);
+var fill = mask.style().fills().addNewStylePart();
+fill.color = MSColor.colorWithSVGString(color);
+mask.frame().constrainProportions = true;
+
+// create the slice
+var path = NSBezierPath.bezierPath();
+path.moveToPoint(NSMakePoint(unit,unit));
+path.lineToPoint(NSMakePoint(unit,-unit));
+path.lineToPoint(NSMakePoint(-unit + offset,unit - offset));
+// path.lineToPoint(NSMakePoint(-unit,unit));
+path.lineToPoint(NSMakePoint(unit,unit));
+path.frame = MSRect.rectWithRect(NSMakeRect(0,0,unit*2,unit*2));
+
+var slice = MSShapeGroup.shapeWithBezierPath(path);
+
+doc.currentPage().addLayers([mask, slice]);
+
+// make the cut
+[mask select:true byExpandingSelection:false]
+[slice select:true byExpandingSelection:true]
+var intersectAction = doc.actionsController().actionWithName("MSIntersectAction");
+if (intersectAction.validate()) {
+    intersectAction.booleanIntersect(nil);
+}

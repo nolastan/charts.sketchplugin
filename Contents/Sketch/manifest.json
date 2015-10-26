@@ -3,18 +3,19 @@
   "commands" : [
     {
       "script" : "script.cocoascript",
-      "handler" : "onRun",
+      "handler" : "bar",
       "shortcut" : "option c",
       "name" : "Bar Chart",
       "identifier" : "bar"
     },
+    {
+      "script" : "script.cocoascript",
+      "handler" : "pie",
+      "shortcut" : "option c",
+      "name" : "Pie Chart",
+      "identifier" : "pie"
+    },
   ],
-  "menu": {
-    "isRoot": true,
-    "items": [
-      "bar",
-    ],
-  },
   "identifier" : "com.github.nolastan.charts",
   "version" : "1.0",
   "description" : "Quickly insert charts into Sketch",
